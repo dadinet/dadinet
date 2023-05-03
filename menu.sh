@@ -677,7 +677,7 @@ change_ip() {
         else
           client_restart
         fi
-      done
+    done
 
     else
       INTERFACE='--interface CloudflareWARP'
