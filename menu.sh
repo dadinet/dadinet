@@ -631,13 +631,16 @@ change_ip() {
       [ "$L" = C ] && COUNTRY=$(translate "$(eval echo \$COUNTRY$NF)") || COUNTRY=$(eval echo \$COUNTRY$NF)
       unset RESULT REGION
       for ((l=0; l<${#RESULT_TITLE[@]}; l++)); do
-        RESULT[l]=$(curl --user-agent "${UA_Browser}" -$NF -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://chat.openai.com")
+        RESULT[l]=$(curl --user-agent "${UA_Browser}" -$NF -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/${RESULT_TITLE[l]}")
         [ "${RESULT[l]}" = 200 ] && break
       done
-      REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -"$NF" -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://chat.openai.com" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
-      REGION=${REGION:-'US'}
-      echo "$REGION"
-      return 0
+      if [[ "${RESULT[@]}" =~ 200 ]]; then
+        REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -"$NF" -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://www.netflix.com/title/$REGION_TITLE" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
+        REGION=${REGION:-'US'}
+        echo "$REGION" | grep -qi "$EXPECT" && info " $(text_eval 125) " && i=0 && sleep 1h || wgcf_restart
+      else
+        wgcf_restart
+      fi
     done
   }
 
@@ -669,7 +672,8 @@ change_ip() {
         if [[ "${RESULT[@]}" =~ 200 ]]; then
           REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -sx socks5h://localhost:$PROXYPORT -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://www.netflix.com/title/$REGION_TITLE" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
           REGION=${REGION:-'US'}
-          echo "$REGION" | grep -qi "$EXPECT" && info " $(text_eval 125) " && i=0 && sleep 1h || client_restart
+          if [[ $(echo "$REGION" | grep -qi "$EXPECT") ]] && [[ $(echo "$REGION" | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b") ]]; then
+          info " $(text_eval 125) " && echo "IPV4 found: $REGION" && break
         else
           client_restart
         fi
