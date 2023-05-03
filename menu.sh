@@ -661,23 +661,28 @@ change_ip() {
       i=0; j=10
       while true; do
         (( i++ )) || true
-        ip_now=$(date +%s); RUNTIME=$((ip_now - ip_start)); DAY=$(( RUNTIME / 86400 )); HOUR=$(( (RUNTIME % 86400 ) / 3600 )); MIN=$(( (RUNTIME % 86400 % 3600) / 60 )); SEC=$(( RUNTIME %86400 % 3600 % 60 ))
-        proxy_info
-        WAN=$PROXYIP && ASNORG=$PROXYASNORG && NF=4 && COUNTRY=$PROXYCOUNTRY
+        ip_now=$(date +%s); RUNTIME=$((ip_now - ip_start)); DAY=$(( RUNTIME / 86400 )); HOUR=$(( (RUNTIME % 86400 ) / 3600 )); MIN=$(( (RUNTIME % 86400 % 3600) / 60 )); SEC=$(( RUNTIME % 86400 % 3600 % 60 ))
+        ip${NF}_info
+        WAN=$(eval echo \$WAN$NF) && ASNORG=$(eval echo \$ASNORG$NF)
+        [ "$L" = C ] && COUNTRY=$(translate "$(eval echo \$COUNTRY$NF)") || COUNTRY=$(eval echo \$COUNTRY$NF)
         unset RESULT REGION
         for ((l=0; l<${#RESULT_TITLE[@]}; l++)); do
-          RESULT[l]=$(curl --user-agent "${UA_Browser}" -sx socks5h://localhost:$PROXYPORT -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/${RESULT_TITLE[l]}")
+          RESULT[l]=$(curl --user-agent "${UA_Browser}" -$NF -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/${RESULT_TITLE[l]}")
           [ "${RESULT[l]}" = 200 ] && break
         done
         if [[ "${RESULT[@]}" =~ 200 ]]; then
-          REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -sx socks5h://localhost:$PROXYPORT -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://www.netflix.com/title/$REGION_TITLE" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
+          REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -"$NF" -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://www.netflix.com/title/$REGION_TITLE" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
           REGION=${REGION:-'US'}
           if [[ $(echo "$REGION" | grep -qi "$EXPECT") ]] && [[ $(echo "$REGION" | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b") ]]; then
-          info " $(text_eval 125) " && echo "IPV4 found: $REGION" && break
+            info " $(text_eval 125) " && echo "IPV4 found: $REGION" && break
+          else
+            wgcf_restart
+          fi
         else
-          client_restart
+          wgcf_restart
         fi
-    done
+      done
+
 
     else
       INTERFACE='--interface CloudflareWARP'
