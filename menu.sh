@@ -634,13 +634,10 @@ change_ip() {
         RESULT[l]=$(curl --user-agent "${UA_Browser}" -$NF -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://chat.openai.com")
         [ "${RESULT[l]}" = 200 ] && break
       done
-      if [[ "${RESULT[@]}" =~ 200 ]]; then
-        REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -"$NF" -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://chat.openai.com" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
-        REGION=${REGION:-'US'}
-        echo "$REGION" | grep -qi "$EXPECT" && info " $(text_eval 125) " && i=0 && sleep 1h || wgcf_restart
-      else
-        wgcf_restart
-      fi
+      REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -"$NF" -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://chat.openai.com" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
+      REGION=${REGION:-'US'}
+      echo "$REGION"
+      return 0
     done
   }
 
