@@ -640,6 +640,9 @@ change_ip() {
         if [[ $(echo "$REGION" | grep -qi "$EXPECT") ]] && [[ $(echo "$REGION" | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b") ]]; then
           info " $(text_eval 125) " && echo "IPV4 found: $REGION" && break
         else
+          wgcf_restart
+        fi
+      else
         wgcf_restart
       fi
     done
