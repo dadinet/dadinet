@@ -721,18 +721,8 @@ change_ip() {
       if [[ "$ipv4" != "$prev_ipv4" ]]; then
         info "New IPV4 address obtained: $ipv4"
         break
-      fi
       prev_ipv4="$ipv4"
-      #unset RESULT REGION
-      #for ((l=0; l<${#RESULT_TITLE[@]}; l++)); do
-        #RESULT[l]=$(curl --user-agent "${UA_Browser}" -sx socks5h://localhost:$PROXYPORT -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/${RESULT_TITLE[l]}")
-        #[ "${RESULT[l]}" = 200 ] && break
-      #done
-      #if [[ "${RESULT[@]}" =~ 200 ]]; then
-        #REGION=$(tr 'a-z' 'A-Z' <<< "$(curl --user-agent "${UA_Browser}" -sx socks5h://localhost:$PROXYPORT -fs --max-time 10 --write-out %{redirect_url} --output /dev/null "https://www.netflix.com/title/$REGION_TITLE" | sed 's/.*com\/\([^-/]\{1,\}\).*/\1/g')")
-        #REGION=${REGION:-'US'}
-        #echo "$REGION" | grep -qi "$EXPECT" && info " $(text_eval 125) " && i=0 && sleep 1h || wireproxy_restart
-      else
+	  else
         wireproxy_restart
       fi
     done
