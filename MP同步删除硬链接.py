@@ -40,7 +40,8 @@ class FileMonitorHandler(FileSystemEventHandler):
         # 新增文件记录
         with state_lock:
             self.sync.state_set[str(file_path)] = file_path.stat().st_ino
-
+            # 更新inode集合
+            self.sync.state_set = updateState(self.sync.monitor_dirs.split("\n"))
     def on_deleted(self, event):
         if event.is_directory:
             return
