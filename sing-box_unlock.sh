@@ -84,6 +84,7 @@ else
     echo "已成功修改 $file2 文件"
 fi
 
-# 如果修改成功，重启sing-box服务
+# 重启sing-box服务
+echo "即将重启sing-box服务"
 sudo systemctl restart sing-box
-echo "已成功重启sing-box服务"
+
