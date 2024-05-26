@@ -84,3 +84,7 @@ echo "已成功添加local-warp出站规则"
 # 清空02_route.json文件并添加新的JSON对象
 echo "$json_obj2" > $file2
 echo "已成功修改 $file2 文件"
+
+# 修改完成，重启sing-box服务
+sudo systemctl restart sing-box
+echo "已成功重启sing-box服务"
