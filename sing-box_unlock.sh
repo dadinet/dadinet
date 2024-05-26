@@ -74,17 +74,16 @@ done
 # 检查是否已经存在local-warp出站规则
 if jq -e '.outbounds[] | select(.tag=="local-warp")' $file1 > /dev/null; then
     echo "local-warp出站规则已经存在，退出修改"
-    exit 0
+else
+    # 将新的出站规则添加到outbounds数组的开始位置
+    jq --argjson obj "$json_obj1" '.outbounds = [$obj] + .outbounds' $file1 > temp.json && mv temp.json $file1
+    echo "已成功添加local-warp出站规则"
+
+    # 清空02_route.json文件并添加新的JSON对象
+    echo "$json_obj2" > $file2
+    echo "已成功修改 $file2 文件"
 fi
 
-# 将新的出站规则添加到outbounds数组的开始位置
-jq --argjson obj "$json_obj1" '.outbounds = [$obj] + .outbounds' $file1 > temp.json && mv temp.json $file1
-echo "已成功添加local-warp出站规则"
-
-# 清空02_route.json文件并添加新的JSON对象
-echo "$json_obj2" > $file2
-echo "已成功修改 $file2 文件"
-
-# 修改完成，重启sing-box服务
+# 如果修改成功，重启sing-box服务
 sudo systemctl restart sing-box
 echo "已成功重启sing-box服务"
