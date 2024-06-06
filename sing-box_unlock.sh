@@ -41,15 +41,15 @@ json_obj2='{
         "rules":[
             {
                 "domain":"api.openai.com",
-                "outbound":"local-warp"
+                "outbound":"direct"
             },
             {
                 "rule_set":"geosite-openai",
-                "outbound":"local-warp"
+                "outbound":"direct"
             },
             {
                 "rule_set":"geosite-disney",
-                "outbound":"local-warp"
+                "outbound":"direct"
             }
         ]
     }
