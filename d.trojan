@@ -1,0 +1,31 @@
+{
+    "inbounds":[
+        {
+            "type":"trojan",
+            "sniff":true,
+            "sniff_override_destination":true,
+            "tag":"liu trojan",
+            "listen":"::",
+            "listen_port":35331,
+            "users":[
+                {
+                    "password":"15b57fe5-6419-4ca6-b73a-e89c2b37ef6f"
+                }
+            ],
+            "tls":{
+                "enabled":true,
+                "certificate_path":"/etc/sing-box/cert/cert.pem",
+                "key_path":"/etc/sing-box/cert/private.key"
+            },
+            "multiplex":{
+                "enabled":true,
+                "padding":true,
+                "brutal":{
+                    "enabled":true,
+                    "up_mbps":1000,
+                    "down_mbps":1000
+                }
+            }
+        }
+    ]
+}
