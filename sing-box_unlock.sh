@@ -33,15 +33,15 @@ json_obj2='{
         "rules":[
             {
                 "domain":"api.openai.com",
-                "outbound":"direct"
+                "outbound":"warp-IPv4-out"
             },
             {
                 "rule_set":"geosite-openai",
-                "outbound":"direct"
+                "outbound":"warp-IPv4-out"
             },
             {
                 "rule_set":"geosite-disney",
-                "outbound":"direct"
+                "outbound":"warp-IPv4-out"
             }
         ]
     }
