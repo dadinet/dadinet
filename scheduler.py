@@ -33,6 +33,7 @@ scheduler_logger = logging.getLogger('apscheduler')
 # 设置日志级别为 WARNING
 scheduler_logger.setLevel(logging.WARNING)
 
+
 class SchedulerChain(ChainBase):
     pass
 
@@ -82,11 +83,6 @@ class Scheduler(metaclass=Singleton):
                     "state": "R"
                 }
             },
-            "subscribe_refresh": {
-                "name": "订阅刷新",
-                "func": SubscribeChain().refresh,
-                "running": False,
-            },
             "clear_cache": {
                 "name": "缓存清理",
                 "func": clear_cache,
@@ -132,7 +128,7 @@ class Scheduler(metaclass=Singleton):
                 }
             )
 
-        # 订阅状态每隔24小时搜索一次
+        # 订阅状态每隔3600小时搜索一次
         if settings.SUBSCRIBE_SEARCH:
             self._scheduler.add_job(
                 self.start,
@@ -145,45 +141,13 @@ class Scheduler(metaclass=Singleton):
                 }
             )
 
-        if settings.SUBSCRIBE_MODE == "spider":
-            # 站点首页种子定时刷新模式
-            triggers = TimerUtils.random_scheduler(num_executions=32)
-            for trigger in triggers:
-                self._scheduler.add_job(
-                    self.start,
-                    "cron",
-                    id=f"subscribe_refresh|{trigger.hour}:{trigger.minute}",
-                    name="订阅刷新",
-                    hour=trigger.hour,
-                    minute=trigger.minute,
-                    kwargs={
-                        'job_id': 'subscribe_refresh'
-                    })
-        else:
-            # RSS订阅模式
-            if not settings.SUBSCRIBE_RSS_INTERVAL \
-                    or not str(settings.SUBSCRIBE_RSS_INTERVAL).isdigit():
-                settings.SUBSCRIBE_RSS_INTERVAL = 30
-            elif int(settings.SUBSCRIBE_RSS_INTERVAL) < 5:
-                settings.SUBSCRIBE_RSS_INTERVAL = 5
-            self._scheduler.add_job(
-                self.start,
-                "interval",
-                id="subscribe_refresh",
-                name="RSS订阅刷新",
-                minutes=int(settings.SUBSCRIBE_RSS_INTERVAL),
-                kwargs={
-                    'job_id': 'subscribe_refresh'
-                }
-            )
-
         # 后台刷新TMDB壁纸
         self._scheduler.add_job(
             self.start,
             "interval",
             id="random_wallpager",
             name="壁纸缓存",
-            minutes=120,
+            hours=24,
             next_run_time=datetime.now(pytz.timezone(settings.TZ)) + timedelta(seconds=3),
             kwargs={
                 'job_id': 'random_wallpager'
