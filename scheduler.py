@@ -82,11 +82,6 @@ class Scheduler(metaclass=Singleton):
                     "state": "R"
                 }
             },
-            "subscribe_refresh": {
-                "name": "订阅刷新",
-                "func": SubscribeChain().refresh,
-                "running": False,
-            },
             "clear_cache": {
                 "name": "缓存清理",
                 "func": clear_cache,
@@ -129,19 +124,6 @@ class Scheduler(metaclass=Singleton):
                 next_run_time=datetime.now(pytz.timezone(settings.TZ)) + timedelta(minutes=5),
                 kwargs={
                     'job_id': 'mediaserver_sync'
-                }
-            )
-
-        # 订阅状态每隔24小时搜索一次
-        if settings.SUBSCRIBE_SEARCH:
-            self._scheduler.add_job(
-                self.start,
-                "interval",
-                id="subscribe_search",
-                name="订阅搜索补全",
-                hours=3600,
-                kwargs={
-                    'job_id': 'subscribe_search'
                 }
             )
 
