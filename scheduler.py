@@ -74,14 +74,6 @@ class Scheduler(metaclass=Singleton):
                 "func": MediaServerChain().sync,
                 "running": False,
             },
-            "subscribe_search": {
-                "name": "订阅搜索补全",
-                "func": SubscribeChain().search,
-                "running": False,
-                "kwargs": {
-                    "state": "R"
-                }
-            },
             "subscribe_refresh": {
                 "name": "订阅刷新",
                 "func": SubscribeChain().refresh,
@@ -139,41 +131,9 @@ class Scheduler(metaclass=Singleton):
                 "interval",
                 id="subscribe_search",
                 name="订阅搜索补全",
-                hours=3600,
+                hours=24,
                 kwargs={
                     'job_id': 'subscribe_search'
-                }
-            )
-
-        if settings.SUBSCRIBE_MODE == "spider":
-            # 站点首页种子定时刷新模式
-            triggers = TimerUtils.random_scheduler(num_executions=32)
-            for trigger in triggers:
-                self._scheduler.add_job(
-                    self.start,
-                    "cron",
-                    id=f"subscribe_refresh|{trigger.hour}:{trigger.minute}",
-                    name="订阅刷新",
-                    hour=trigger.hour,
-                    minute=trigger.minute,
-                    kwargs={
-                        'job_id': 'subscribe_refresh'
-                    })
-        else:
-            # RSS订阅模式
-            if not settings.SUBSCRIBE_RSS_INTERVAL \
-                    or not str(settings.SUBSCRIBE_RSS_INTERVAL).isdigit():
-                settings.SUBSCRIBE_RSS_INTERVAL = 30
-            elif int(settings.SUBSCRIBE_RSS_INTERVAL) < 5:
-                settings.SUBSCRIBE_RSS_INTERVAL = 5
-            self._scheduler.add_job(
-                self.start,
-                "interval",
-                id="subscribe_refresh",
-                name="RSS订阅刷新",
-                minutes=int(settings.SUBSCRIBE_RSS_INTERVAL),
-                kwargs={
-                    'job_id': 'subscribe_refresh'
                 }
             )
 
