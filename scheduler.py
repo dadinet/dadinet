@@ -50,8 +50,6 @@ class Scheduler(metaclass=Singleton):
     _lock = threading.Lock()
     # 各服务的运行状态
     _jobs = {}
-    # 用户认证失败次数
-    _auth_count = 0
 
     def __init__(self):
         self.init()
@@ -82,6 +80,11 @@ class Scheduler(metaclass=Singleton):
                 "kwargs": {
                     "state": "R"
                 }
+            },
+            "transfer": {
+                "name": "下载文件整理",
+                "func": TransferChain().process,
+                "running": False,
             },
             "clear_cache": {
                 "name": "缓存清理",
@@ -138,6 +141,19 @@ class Scheduler(metaclass=Singleton):
                 hours=3600,
                 kwargs={
                     'job_id': 'subscribe_search'
+                }
+            )
+
+        # 下载器文件转移（每5分钟）
+        if settings.DOWNLOADER_MONITOR:
+            self._scheduler.add_job(
+                self.start,
+                "interval",
+                id="transfer",
+                name="下载文件整理",
+                minutes=5,
+                kwargs={
+                    'job_id': 'transfer'
                 }
             )
 
