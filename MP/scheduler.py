@@ -73,12 +73,20 @@ class Scheduler(metaclass=Singleton):
                 "func": MediaServerChain().sync,
                 "running": False,
             },
+            "new_subscribe_search": {
+                "name": "新增订阅搜索",
+                "func": SubscribeChain().search,
+                "running": False,
+                "kwargs": {
+                    "state": "N"
+                }
+            },
             "subscribe_search": {
                 "name": "订阅搜索补全",
                 "func": SubscribeChain().search,
                 "running": False,
                 "kwargs": {
-                    "state": "R,N"
+                    "state": "R"
                 }
             },
             "clear_cache": {
@@ -126,7 +134,19 @@ class Scheduler(metaclass=Singleton):
                 }
             )
 
-        # 订阅状态每隔1年搜索一次
+        # 新增订阅时搜索（1年检查一次）
+        self._scheduler.add_job(
+            self.start,
+            "interval",
+            id="new_subscribe_search",
+            name="新增订阅搜索",
+            hours=8760,
+            kwargs={
+                'job_id': 'new_subscribe_search'
+            }
+        )
+
+        # 订阅搜索补全（1年检查一次）
         if settings.SUBSCRIBE_SEARCH:
             self._scheduler.add_job(
                 self.start,
