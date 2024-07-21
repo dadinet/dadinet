@@ -76,7 +76,7 @@ class Scheduler(metaclass=Singleton):
             "subscribe_search": {
                 "name": "订阅搜索补全",
                 "func": SubscribeChain().search,
-                "running": False,
+                "running": running,
                 "kwargs": {
                     "state": "R"
                 }
