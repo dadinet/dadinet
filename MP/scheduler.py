@@ -76,10 +76,7 @@ class Scheduler(metaclass=Singleton):
             "subscribe_search": {
                 "name": "订阅搜索补全",
                 "func": SubscribeChain().search,
-                "running": running,
-                "kwargs": {
-                    "state": "R"
-                }
+                "running": False,
             },
             "transfer": {
                 "name": "下载文件整理",
