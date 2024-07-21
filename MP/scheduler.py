@@ -126,13 +126,13 @@ class Scheduler(metaclass=Singleton):
                 }
             )
 
-        # 订阅状态每隔24小时搜索一次
+        # 订阅状态每隔1年搜索一次
 		self._scheduler.add_job(
 			self.start,
 			"interval",
 			id="subscribe_search",
 			name="订阅搜索补全",
-			hours=3600,
+			hours=8760,
 			kwargs={
 				'job_id': 'subscribe_search'
 			}
