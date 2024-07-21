@@ -78,7 +78,7 @@ class Scheduler(metaclass=Singleton):
                 "func": SubscribeChain().search,
                 "running": False,
                 "kwargs": {
-                    "state": ["R", "N"]
+                    "state": "R,N"
                 }
             },
             "clear_cache": {
