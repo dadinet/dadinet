@@ -132,17 +132,16 @@ class Scheduler(metaclass=Singleton):
             )
 
         # 订阅状态每隔3600小时搜索一次
-        if settings.SUBSCRIBE_SEARCH:
-            self._scheduler.add_job(
-                self.start,
-                "interval",
-                id="subscribe_search",
-                name="订阅搜索补全",
-                hours=3600,
-                kwargs={
-                    'job_id': 'subscribe_search'
-                }
-            )
+        self._scheduler.add_job(
+            self.start,
+            "interval",
+            id="subscribe_search",
+            name="订阅搜索补全",
+            hours=1,  # 假设你希望任务每小时执行一次
+            kwargs={
+                'job_id': 'subscribe_search'
+            }
+        )
 
         # 下载器文件转移（每5分钟）
         if settings.DOWNLOADER_MONITOR:
