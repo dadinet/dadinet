@@ -137,7 +137,7 @@ class Scheduler(metaclass=Singleton):
             "interval",
             id="subscribe_search",
             name="订阅搜索补全",
-            hours=1,  # 假设你希望任务每小时执行一次
+            hours=3600,
             kwargs={
                 'job_id': 'subscribe_search'
             }
