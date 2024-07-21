@@ -77,11 +77,9 @@ class Scheduler(metaclass=Singleton):
                 "name": "订阅搜索补全",
                 "func": SubscribeChain().search,
                 "running": False,
-            },
-            "transfer": {
-                "name": "下载文件整理",
-                "func": TransferChain().process,
-                "running": False,
+                "kwargs": {
+                    "state": ["R", "N"]
+                }
             },
             "clear_cache": {
                 "name": "缓存清理",
@@ -128,30 +126,17 @@ class Scheduler(metaclass=Singleton):
                 }
             )
 
-        # 订阅状态每隔3600小时搜索一次
-        self._scheduler.add_job(
-            self.start,
-            "interval",
-            id="subscribe_search",
-            name="订阅搜索补全",
-            hours=3600,
-            kwargs={
-                'job_id': 'subscribe_search'
-            }
-        )
-
-        # 下载器文件转移（每5分钟）
-        if settings.DOWNLOADER_MONITOR:
-            self._scheduler.add_job(
-                self.start,
-                "interval",
-                id="transfer",
-                name="下载文件整理",
-                minutes=5,
-                kwargs={
-                    'job_id': 'transfer'
-                }
-            )
+        # 订阅状态每隔24小时搜索一次
+		self._scheduler.add_job(
+			self.start,
+			"interval",
+			id="subscribe_search",
+			name="订阅搜索补全",
+			hours=3600,
+			kwargs={
+				'job_id': 'subscribe_search'
+			}
+		)
 
         # 后台刷新TMDB壁纸
         self._scheduler.add_job(
