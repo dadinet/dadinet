@@ -29,7 +29,7 @@ const filterForm = reactive({
   edition: [] as string[],
   // 分辨率
   resolution: [] as string[],
-  // 排序字段
+  // 排序
   sortField: 'default' as string,
 })
 
