@@ -6,7 +6,7 @@ import TorrentCard from '@/components/cards/TorrentCard.vue'
 interface SearchTorrent extends Context {
   more?: Array<Context>
 }
-1
+
 // 定义输入参数
 const props = defineProps({
   // 数据列表
