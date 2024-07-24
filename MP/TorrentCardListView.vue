@@ -35,7 +35,7 @@ const filterForm = reactive({
 
 // 映射排序选项到中文标签
 const sortOptions = [
-  { value: 'default', text: '默认' },
+  { value: 'default', text: '优先级' },
   { value: 'site', text: '站点' },
   { value: 'size', text: '文件大小' },
   { value: 'seeder', text: '做种数' }
