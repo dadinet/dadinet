@@ -447,6 +447,13 @@ class DoubanSync(_PluginBase):
                                                 'class': 'pa-0 px-2'
                                             },
                                             'text': f'时间：{time_str}'
+                                        },
+                                        {
+                                            'component': 'VCardText',
+                                            'props': {
+                                                'class': 'pa-0 px-2'
+                                            },
+                                            'text': f'用户：{user_info}'
                                         }
                                     ]
                                 }
@@ -605,6 +612,7 @@ class DoubanSync(_PluginBase):
                         "tmdbid": mediainfo.tmdb_id,
                         "doubanid": douban_id,
                         "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        "user_info": user_info
                     })
                 except Exception as err:
                     logger.error(f'同步用户 {user_info} 豆瓣想看数据出错：{str(err)}')
