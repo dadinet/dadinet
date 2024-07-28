@@ -373,6 +373,7 @@ class DoubanSync(_PluginBase):
             mtype = history.get("type")
             time_str = history.get("time")
             doubanid = history.get("doubanid")
+            user_info = history.get("user_info")
             contents.append(
                 {
                     'component': 'VCard',
