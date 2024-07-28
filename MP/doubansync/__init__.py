@@ -612,7 +612,7 @@ class DoubanSync(_PluginBase):
                         "overview": mediainfo.overview,
                         "tmdbid": mediainfo.tmdb_id,
                         "doubanid": douban_id,
-                        "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        "time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                         "user_info": user_info
                     })
                 except Exception as err:
