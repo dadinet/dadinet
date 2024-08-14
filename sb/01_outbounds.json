@@ -1,0 +1,31 @@
+{
+    "outbounds":[
+        {
+            "type":"socks",
+            "tag":"local-warp",
+            "server":"127.0.0.1",
+            "server_port": 40000
+        },
+        {
+            "type":"direct",
+            "tag":"direct",
+            "domain_strategy":"prefer_ipv4"
+        },
+        {
+            "type":"direct",
+            "tag":"warp-IPv4-out",
+            "detour":"local-warp",
+            "domain_strategy":"ipv4_only"
+        },
+        {
+            "type":"direct",
+            "tag":"warp-IPv6-out",
+            "detour":"local-warp",
+            "domain_strategy":"ipv6_only"
+        },
+        {
+            "type":"block",
+            "tag":"block"
+        }
+    ]
+}
