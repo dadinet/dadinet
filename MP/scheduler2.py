@@ -145,7 +145,7 @@ class Scheduler(metaclass=Singleton):
             "interval",
             id="new_subscribe_search",
             name="新增订阅搜索",
-            hours=8760,
+            minutes=5,
             kwargs={
                 'job_id': 'new_subscribe_search'
             }
