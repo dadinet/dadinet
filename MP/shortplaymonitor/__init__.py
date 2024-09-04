@@ -64,7 +64,7 @@ class ShortPlayMonitor(_PluginBase):
     # 插件图标
     plugin_icon = "Amule_B.png"
     # 插件版本
-    plugin_version = "3.2"
+    plugin_version = "5.0"
     # 插件作者
     plugin_author = "thsrite"
     # 作者主页
@@ -300,8 +300,6 @@ class ShortPlayMonitor(_PluginBase):
             if not file_meta.name:
                 logger.error(f"{Path(event_path).name} 无法识别有效信息")
                 return
-            # 识别媒体信息
-            mediainfo: MediaInfo = self.chain.recognize_media(meta=file_meta)
 
             transfer_flag = False
             if not transfer_flag:
