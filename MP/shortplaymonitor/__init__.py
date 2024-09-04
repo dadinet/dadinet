@@ -678,7 +678,7 @@ class ShortPlayMonitor(_PluginBase):
 
         return page_source
 
-    def gen_file_thumb(self, title: str, file_path: Path, rename_conf: str):
+    def gen_file_thumb(self, title: str, file_path: Path, target_path, rename_conf: str):
         """
         处理一个文件
         """
