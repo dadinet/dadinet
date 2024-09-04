@@ -684,8 +684,7 @@ class ShortPlayMonitor(_PluginBase):
         """
         # 智能重命名时从站点检索
         if str(rename_conf) == "smart":
-            target_path = event_path.replace(source_dir, dest_dir)
-            thumb_path = target_path.parent / "poster.jpg"
+            thumb_path = file_path.parent / "poster.jpg"
             if thumb_path.exists():
                 logger.info(f"缩略图已存在：{thumb_path}")
                 return
