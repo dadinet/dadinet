@@ -678,12 +678,13 @@ class ShortPlayMonitor(_PluginBase):
 
         return page_source
 
-    def gen_file_thumb(self, title: str, file_path: Path, target_path, rename_conf: str):
+    def gen_file_thumb(self, title: str, file_path: Path, rename_conf: str):
         """
         处理一个文件
         """
         # 智能重命名时从站点检索
         if str(rename_conf) == "smart":
+            target_path = event_path.replace(source_dir, dest_dir)
             thumb_path = target_path.parent / "poster.jpg"
             if thumb_path.exists():
                 logger.info(f"缩略图已存在：{thumb_path}")
