@@ -1,0 +1,10 @@
+{
+  "name": "dadinet图标包",
+  "description": "个人使用",
+  "icons": [
+    {
+      "name": "18+",
+      "url": "https://raw.githubusercontent.com/dadinet/dadinet/refs/heads/main/icons/18%2B.png"
+    }
+  ]
+}
